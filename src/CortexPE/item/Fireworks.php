@@ -24,12 +24,17 @@ declare(strict_types=1);
 
 namespace CortexPE\item;
 
+use CortexPE\Main;
+use CortexPE\Session;
+use CortexPE\task\ElytraRocketBoostTrackingTask;
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
+use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\level\sound\BlazeShootSound;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\network\mcpe\protocol\LevelSoundEventPacket;
 use pocketmine\Player;
 use pocketmine\item\Item;
 
@@ -42,6 +47,10 @@ class Fireworks extends Item{
 	public const TYPE_STAR = 2;
 	public const TYPE_CREEPER_HEAD = 3;
 	public const TYPE_BURST = 4;
+    
+    public const TAG_FIREWORKS = "Fireworks";
+    public const TAG_EXPLOSIONS = "Explosions";
+    public const TAG_FLIGHT = "Flight";
 
 	public const COLOR_BLACK = "\x00";
 	public const COLOR_RED = "\x01";
@@ -110,22 +119,40 @@ class Fireworks extends Item{
 
 		return false;
 	}
-
-	public function onClickAir(Player $player, Vector3 $directionVector) : bool{
-		if($player->isFlying()){//MEMO: pocketmine\Player::isGliding is not found
-			$motion = new Vector3((-sin($player->yaw / 180 * M_PI) * cos($player->pitch / 180 * M_PI) * self::BOOST_POWER), (-sin($player->pitch / 180 * M_PI) * self::BOOST_POWER), (cos($player->yaw / 180 * M_PI) * cos($player->pitch / 180 * M_PI) * self::BOOST_POWER));
-
-			$nbt = Entity::createBaseNBT($player, $motion->subtract(0, 0.1, 0), lcg_value() * 360, 90);
-			$entity = Entity::createEntity("FireworksRocket", $player->getLevel(), $nbt, $this);
-
-			if($entity instanceof Entity){
-				$this->pop();
-				$entity->spawnToAll();
-				$player->setMotion($motion);
-				$player->getLevel()->addSound(new BlazeShootSound($player));
-			}
-		}
-
-		return true;
-	}
+    
+    public function onClickAir(Player $player, Vector3 $directionVector): bool{
+        if(Main::$elytraEnabled && Main::$elytraBoostEnabled){
+            $session = Main::getInstance()->getSessionById($player->getId());
+            if($session instanceof Session){
+                if($session->usingElytra && !$player->isOnGround()){
+                    if($player->getGamemode() != Player::CREATIVE && $player->getGamemode() != Player::SPECTATOR){
+                        $this->pop();
+                    }
+                    $damage = 0;
+                    $flight = 1;
+                    if(Main::$fireworksEnabled){
+                        if($this->getNamedTag()->hasTag(self::TAG_FIREWORKS, CompoundTag::class)){
+                            $fwNBT = $this->getNamedTag()->getCompoundTag(self::TAG_FIREWORKS);
+                            $flight = $fwNBT->getByte(self::TAG_FLIGHT);
+                            $explosions = $fwNBT->getListTag(self::TAG_EXPLOSIONS);
+                            if(count($explosions) > 0){
+                                $damage = 7;
+                            }
+                        }
+                    }
+                    $dir = $player->getDirectionVector();
+                    $player->setMotion($dir->multiply($flight * 1.25));
+                    $player->getLevel()->broadcastLevelSoundEvent($player->asVector3(), LevelSoundEventPacket::SOUND_LAUNCH);
+                    if(Main::$elytraBoostParticles){
+                        Main::getInstance()->getScheduler()->scheduleRepeatingTask(new ElytraRocketBoostTrackingTask($player, 6), 4);
+                    }
+                    if($damage > 0){
+                        $ev = new EntityDamageEvent($player, EntityDamageEvent::CAUSE_CUSTOM, 7); // lets wait till PMMP Adds Fireworks damage constant
+                        $player->attack($ev);
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }
