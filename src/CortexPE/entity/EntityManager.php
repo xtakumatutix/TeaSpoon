@@ -81,10 +81,10 @@ use CortexPE\entity\mob\{
 	ZombieVillager
 };
 use CortexPE\entity\object\{
-	AreaEffectCloud, ArmorStand, EndCrystal, Lightning
+	AreaEffectCloud, ArmorStand, EndCrystal, Lightning, FireworksRocket
 };
 use CortexPE\entity\projectile\{
-	Arrow, FireworkRocket, FishingHook, LingeringPotion, ThrownTrident
+	Arrow, FishingHook, LingeringPotion, ThrownTrident
 };
 use CortexPE\entity\vehicle\Boat;
 use CortexPE\entity\vehicle\BrokenMinecart;
@@ -146,7 +146,6 @@ class EntityManager extends Entity {
 		self::registerEntity(LingeringPotion::class, true, ['LingeringPotion', 'minecraft:lingeringpotion']);
 		self::registerEntity(FishingHook::class, true, ['FishingHook', 'minecraft:fishinghook']);
 		self::registerEntity(Arrow::class, true, ['Arrow', 'minecraft:arrow']);
-		self::registerEntity(FireworkRocket::class, true, ['Firework', 'minecraft:firework']);
 		self::registerEntity(ThrownTrident::class, true, ['Trident', 'minecraft:trident']);
 
 		// Other Entities ////
@@ -155,6 +154,9 @@ class EntityManager extends Entity {
 		self::registerEntity(EndCrystal::class, true, ['EnderCrystal', 'minecraft:ender_crystal']);
 		self::registerEntity(Boat::class, true, ['Boat', 'minecraft:boat']);
 		self::registerEntity(ArmorStand::class, true, ['ArmorStand', 'minecraft:armor_stand']);
+		
+        self::registerEntity(FireworksRocket::class, true, ['Firework', 'minecraft:firework']);
+        
 //		if(strtolower(Main::$cars) === "true"){
 //			Main::getPluginLogger()->debug("Using Minecart Vanilla");
 //			self::registerEntity(Minecart::class, true, ['Minecart', 'minecraft:minecart']);
