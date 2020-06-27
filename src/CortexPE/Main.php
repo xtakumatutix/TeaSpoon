@@ -299,8 +299,6 @@ class Main extends PluginBase {
 			if(!isset($meta["builderName"]) || !is_array($meta)){
 				$this->getLogger()->warning("You're using a developer's build of TeaSpoon. For better performance and stability, please get a pre-packaged version.");
 				self::$sixCharCommitHash = "DEVELOPER_VERSION";
-
-				return;
 			}
 			self::$sixCharCommitHash = substr($meta["fromCommit"], 0, 6);
 		}else{
