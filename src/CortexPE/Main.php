@@ -204,21 +204,21 @@ class Main extends PluginBase {
 	}
 
 	public static function sendVersion(CommandSender $sender, bool $separator = true){
-		$logo = TextFormat::DARK_GREEN . "\x54\x65\x61" . TextFormat::GREEN . "\x53\x70\x6f\x6f\x6e";
+		$logo = TextFormat::DARK_GREEN . "Tea" . TextFormat::GREEN . "Spon";
 		if(Splash::isValentines()){
-			$logo = TextFormat::RED . "\x44\x65\x73\x73\x65\x72\x74" . TextFormat::DARK_RED . "\x53\x70\x6f\x6f\x6e";
+			$logo = TextFormat::RED . "Dessert" . TextFormat::DARK_RED . "Spoon";
 		}elseif(Splash::isChristmastide()){
-			$logo = TextFormat::RED . "\x54\x65\x61" . TextFormat::GREEN . "\x53\x70\x6f\x6f\x6e";
+			$logo = TextFormat::RED . "Tea" . TextFormat::GREEN . "Spoon";
 		}
-		$sender->sendMessage("\x54\x68\x69\x73\x20\x73\x65\x72\x76\x65\x72\x20\x69\x73\x20\x72\x75\x6e\x6e\x69\x6e\x67\x20" . $logo . TextFormat::WHITE . "\x20\x76" . self::$instance->getDescription()->getVersion() . (Utils::isPhared() ? "" : "-dev") . "\x20\x66\x6f\x72\x20\x50\x6f\x63\x6b\x65\x74\x4d\x69\x6e\x65\x2d\x4d\x50\x20" . Server::getInstance()->getApiVersion());
+		$sender->sendMessage("This server is running" . $logo . TextFormat::WHITE . " v" . self::$instance->getDescription()->getVersion() . (Utils::isPhared() ? "" : "-dev") . "for PocketMine-MP " . Server::getInstance()->getApiVersion());
 
 		if(self::$sixCharCommitHash != ""){
-			$sender->sendMessage("\x43\x6f\x6d\x6d\x69\x74\x3a\x20" . self::$sixCharCommitHash);
+			$sender->sendMessage("Commit: " . self::$sixCharCommitHash);
 		}
-		$sender->sendMessage("\x52\x65\x70\x6f\x73\x69\x74\x6f\x72\x79\x3a\x20\x68\x74\x74\x70\x73\x3a\x2f\x2f\x67\x69\x74\x68\x75\x62\x2e\x63\x6f\x6d\x2f\x43\x6f\x72\x74\x65\x78\x50\x45\x2f\x54\x65\x61\x53\x70\x6f\x6f\x6e");
-		$sender->sendMessage("\x57\x65\x62\x73\x69\x74\x65\x3a\x20\x68\x74\x74\x70\x73\x3a\x2f\x2f\x43\x6f\x72\x74\x65\x78\x50\x45\x2e\x78\x79\x7a");
+		$sender->sendMessage("Repository: https://github.com/CortexPE/TeaSpoon");
+		$sender->sendMessage("Website: https://CortexPE.xyz");
 		if($separator){
-			$sender->sendMessage("\x2d\x2d\x2d\x20\x2b\x20\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x20\x2b\x20\x2d\x2d\x2d");
+			$sender->sendMessage("--- + --------------- + ---");
 		}
 	}
 
