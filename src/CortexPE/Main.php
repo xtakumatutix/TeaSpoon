@@ -215,8 +215,8 @@ class Main extends PluginBase {
 		if(self::$sixCharCommitHash != ""){
 			$sender->sendMessage("Commit: " . self::$sixCharCommitHash);
 		}
-		$sender->sendMessage("Repository: https://github.com/CortexPE/TeaSpoon");
-		$sender->sendMessage("Website: https://CortexPE.xyz");
+		$sender->sendMessage("Repository: https://github.com/BreathTakinglyBinary/TeaSpoon");
+		$sender->sendMessage("Website: https://WePlayBTB.com");
 		if($separator){
 			$sender->sendMessage("--- + --------------- + ---");
 		}
