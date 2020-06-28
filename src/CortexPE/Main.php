@@ -204,7 +204,7 @@ class Main extends PluginBase {
 	}
 
 	public static function sendVersion(CommandSender $sender, bool $separator = true){
-		$logo = TextFormat::DARK_GREEN . "Tea" . TextFormat::GREEN . "Spon";
+		$logo = TextFormat::DARK_GREEN . "Tea" . TextFormat::GREEN . "Spoon";
 		if(Splash::isValentines()){
 			$logo = TextFormat::RED . "Dessert" . TextFormat::DARK_RED . "Spoon";
 		}elseif(Splash::isChristmastide()){
