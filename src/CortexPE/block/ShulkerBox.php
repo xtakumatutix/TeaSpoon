@@ -50,10 +50,6 @@ class ShulkerBox extends Transparent {
 		$this->meta = $meta;
 	}
 
-	public function setMeta(int $meta){
-		$this->meta = $meta;
-	}
-
 	public function getResistance(): float{
 		return 30;
 	}
