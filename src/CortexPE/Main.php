@@ -210,7 +210,7 @@ class Main extends PluginBase {
 		}elseif(Splash::isChristmastide()){
 			$logo = TextFormat::RED . "Tea" . TextFormat::GREEN . "Spoon";
 		}
-		$sender->sendMessage("This server is running" . $logo . TextFormat::WHITE . " v" . self::$instance->getDescription()->getVersion() . (Utils::isPhared() ? "" : "-dev") . "for PocketMine-MP " . Server::getInstance()->getApiVersion());
+		$sender->sendMessage("This server is running " . $logo . TextFormat::WHITE . " v" . self::$instance->getDescription()->getVersion() . (Utils::isPhared() ? "" : "-dev") . " for PocketMine-MP " . Server::getInstance()->getApiVersion());
 
 		if(self::$sixCharCommitHash != ""){
 			$sender->sendMessage("Commit: " . self::$sixCharCommitHash);
