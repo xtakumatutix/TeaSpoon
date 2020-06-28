@@ -42,9 +42,7 @@ use CortexPE\Utils;
 use pocketmine\event\{
 	Listener, server\DataPacketReceiveEvent, server\DataPacketSendEvent
 };
-use pocketmine\network\mcpe\protocol\{
-	PlayerActionPacket, StartGamePacket
-};
+use pocketmine\network\mcpe\protocol\{PlayerActionPacket, StartGamePacket, types\SpawnSettings};
 use pocketmine\Player as PMPlayer;
 use pocketmine\plugin\Plugin;
 
@@ -102,8 +100,8 @@ class PacketHandler implements Listener {
 				}
 				break;
 			case ($pk instanceof InventoryTransactionPacket): // TODO: Remove this once https://github.com/pmmp/PocketMine-MP/pull/2124 gets merged
-				if($pk->transactionType == InventoryTransactionPacket::TYPE_USE_ITEM_ON_ENTITY){
-					if($pk->trData->actionType == InventoryTransactionPacket::USE_ITEM_ON_ENTITY_ACTION_INTERACT){
+				if($pk->transactionType === InventoryTransactionPacket::TYPE_USE_ITEM_ON_ENTITY){
+					if($pk->trData->actionType === InventoryTransactionPacket::USE_ITEM_ON_ENTITY_ACTION_INTERACT){
 						$entity = $p->getLevel()->getEntity($pk->trData->entityRuntimeId);
 						$item = $p->getInventory()->getItemInHand();
 						$slot = $pk->trData->hotbarSlot;
@@ -147,7 +145,8 @@ class PacketHandler implements Listener {
 		switch(true){
 			case ($pk instanceof StartGamePacket):
 				if(Main::$registerDimensions){
-					$pk->dimension = Utils::getDimension($p->getLevel());
+					$spawnSettings = $pk->spawnSettings;
+					$pk->spawnSettings = new SpawnSettings($spawnSettings->getBiomeType(), $spawnSettings->getBiomeName(), Utils::getDimension($p->getLevel()));
 				}
 				break;
 		}
