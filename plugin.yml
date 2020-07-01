@@ -1,7 +1,7 @@
 name: TeaSpoonJP
 main: CortexPE\Main
 version: 1.2.0
-api: 3.9.0
+api: 3.9.4
 load: STARTUP
 author: CortexPE
 authors: [xtakumatutix]
