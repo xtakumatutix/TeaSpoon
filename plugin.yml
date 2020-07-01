@@ -1,8 +1,9 @@
-name: TeaSpoon
+name: TeaSpoonJP
 main: CortexPE\Main
 version: 1.2.0
 api: 3.9.0
 load: STARTUP
 author: CortexPE
-description: A PLUGIN to Extend PMMP's Functionality without completely changing it.
-website: https://CortexPE.xyz
+authors: [xtakumatutix]
+description: プラグインでPMMPにバニラ機能を追加
+website: https://github.com/CortexPE/TeaSpoon
