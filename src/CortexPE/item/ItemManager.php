@@ -36,9 +36,7 @@ declare(strict_types = 1);
 namespace CortexPE\item;
 
 use CortexPE\Main;
-use pocketmine\item\{
-	Item, ItemFactory
-};
+use pocketmine\item\{Item, ItemBlock, ItemFactory};
 
 class ItemManager {
 	public static function init(){
@@ -54,6 +52,8 @@ class ItemManager {
 		ItemFactory::registerItem(new EndCrystal(), true);
 		ItemFactory::registerItem(new Bucket(), true);
 		ItemFactory::registerItem(new ArmorStand(), true);
+		ItemFactory::registerItem(new ShulkerBox(), true);
+		ItemFactory::registerItem(new UnDyedShulkerBox(), true);
 		if(Main::$cars){
 			ItemFactory::registerItem(new Minecart(), true);
 		}

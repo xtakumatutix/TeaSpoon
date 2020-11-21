@@ -204,21 +204,21 @@ class Main extends PluginBase {
 	}
 
 	public static function sendVersion(CommandSender $sender, bool $separator = true){
-		$logo = TextFormat::DARK_GREEN . "\x54\x65\x61" . TextFormat::GREEN . "\x53\x70\x6f\x6f\x6e";
+		$logo = TextFormat::DARK_GREEN . "Tea" . TextFormat::GREEN . "Spoon";
 		if(Splash::isValentines()){
-			$logo = TextFormat::RED . "\x44\x65\x73\x73\x65\x72\x74" . TextFormat::DARK_RED . "\x53\x70\x6f\x6f\x6e";
+			$logo = TextFormat::RED . "Dessert" . TextFormat::DARK_RED . "Spoon";
 		}elseif(Splash::isChristmastide()){
-			$logo = TextFormat::RED . "\x54\x65\x61" . TextFormat::GREEN . "\x53\x70\x6f\x6f\x6e";
+			$logo = TextFormat::RED . "Tea" . TextFormat::GREEN . "Spoon";
 		}
-		$sender->sendMessage("\x54\x68\x69\x73\x20\x73\x65\x72\x76\x65\x72\x20\x69\x73\x20\x72\x75\x6e\x6e\x69\x6e\x67\x20" . $logo . TextFormat::WHITE . "\x20\x76" . self::$instance->getDescription()->getVersion() . (Utils::isPhared() ? "" : "-dev") . "\x20\x66\x6f\x72\x20\x50\x6f\x63\x6b\x65\x74\x4d\x69\x6e\x65\x2d\x4d\x50\x20" . Server::getInstance()->getApiVersion());
+		$sender->sendMessage("This server is running " . $logo . TextFormat::WHITE . " v" . self::$instance->getDescription()->getVersion() . (Utils::isPhared() ? "" : "-dev") . " for PocketMine-MP " . Server::getInstance()->getApiVersion());
 
 		if(self::$sixCharCommitHash != ""){
-			$sender->sendMessage("\x43\x6f\x6d\x6d\x69\x74\x3a\x20" . self::$sixCharCommitHash);
+			$sender->sendMessage("Commit: " . self::$sixCharCommitHash);
 		}
-		$sender->sendMessage("\x52\x65\x70\x6f\x73\x69\x74\x6f\x72\x79\x3a\x20\x68\x74\x74\x70\x73\x3a\x2f\x2f\x67\x69\x74\x68\x75\x62\x2e\x63\x6f\x6d\x2f\x43\x6f\x72\x74\x65\x78\x50\x45\x2f\x54\x65\x61\x53\x70\x6f\x6f\x6e");
-		$sender->sendMessage("\x57\x65\x62\x73\x69\x74\x65\x3a\x20\x68\x74\x74\x70\x73\x3a\x2f\x2f\x43\x6f\x72\x74\x65\x78\x50\x45\x2e\x78\x79\x7a");
+		$sender->sendMessage("Repository: https://github.com/BreathTakinglyBinary/TeaSpoon");
+		$sender->sendMessage("Website: https://WePlayBTB.com");
 		if($separator){
-			$sender->sendMessage("\x2d\x2d\x2d\x20\x2b\x20\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x2d\x20\x2b\x20\x2d\x2d\x2d");
+			$sender->sendMessage("--- + --------------- + ---");
 		}
 	}
 
@@ -297,27 +297,19 @@ class Main extends PluginBase {
 		if(Utils::isPhared()){ // unphared = dev
 			$meta = (new \Phar(\Phar::running(false)))->getMetadata(); // https://github.com/poggit/poggit/blob/beta/src/poggit/ci/builder/ProjectBuilder.php#L227-L236
 			if(!isset($meta["builderName"]) || !is_array($meta)){
-				$this->getLogger()->error("Only use TeaSpoon Builds from Poggit: https://poggit.pmmp.io/ci/CortexPE/TeaSpoon/~");
-				$this->disable = true;
-
-				return;
+				$this->getLogger()->warning("You're using a developer's build of TeaSpoon. For better performance and stability, please get a pre-packaged version.");
+				self::$sixCharCommitHash = "DEVELOPER_VERSION";
+			}else{
+				self::$sixCharCommitHash = substr($meta["fromCommit"], 0, 6);
 			}
-			self::$sixCharCommitHash = substr($meta["fromCommit"], 0, 6);
 		}else{
-			$this->getLogger()->warning("You're using a developer's build of TeaSpoon. For better performance and stability, please get a pre-packaged version here: https://poggit.pmmp.io/ci/CortexPE/TeaSpoon/~");
+			$this->getLogger()->warning("You're using a developer's build of TeaSpoon. For better performance and stability, please get a pre-packaged version.");
 		}
 
 		self::$instance = $this;
 	}
 
 	public function onEnable(){
-		// Yes compatibility checks (the ones with setEnabled(false)) are repeated because they should still look good in CLI...
-		if($this->disable){
-			$this->setEnabled(false);
-
-			return;
-		}
-
 		$yr = 2017 . ((2017 != date('Y')) ? '-' . date('Y') : '');
 		$stms = TextFormat::DARK_GREEN . "\n\nMMP\"\"MM\"\"YMM              " . TextFormat::GREEN . " .M\"\"\"bgd                                        " . TextFormat::DARK_GREEN . "\nP'   MM   `7             " . TextFormat::GREEN . " ,MI    \"Y                                        " . TextFormat::DARK_GREEN . "\n     MM  .gP\"Ya   ,6\"Yb.  " . TextFormat::GREEN . "`MMb.   `7MMpdMAo.  ,pW\"Wq.   ,pW\"Wq.`7MMpMMMb.  " . TextFormat::DARK_GREEN . "\n     MM ,M'   Yb 8)   MM" . TextFormat::GREEN . "    `YMMNq. MM   `Wb 6W'   `Wb 6W'   `Wb MM    MM  " . TextFormat::DARK_GREEN . "\n     MM 8M\"\"\"\"\"\"  ,pm9MM " . TextFormat::GREEN . " .     `MM MM    M8 8M     M8 8M     M8 MM    MM  " . TextFormat::DARK_GREEN . "\n     MM YM.    , 8M   MM  " . TextFormat::GREEN . "Mb     dM MM   ,AP YA.   ,A9 YA.   ,A9 MM    MM  " . TextFormat::DARK_GREEN . "\n   .JMML.`Mbmmd' `Moo9^Yo." . TextFormat::GREEN . "P\"Ybmmd\"  MMbmmd'   `Ybmd9'   `Ybmd9'.JMML  JMML." . TextFormat::GREEN . "\n                                    MM                                     \n                                  .JMML.  " . TextFormat::YELLOW . Splash::getRandomSplash() . TextFormat::RESET . "\nCopyright (C) CortexPE " . $yr . "\n";
 		switch(true){ // todo: add more events?

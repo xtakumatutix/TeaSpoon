@@ -36,15 +36,10 @@ declare(strict_types = 1);
 namespace CortexPE\block;
 
 use CortexPE\Main;
-use CortexPE\tile\{
-	ShulkerBox as TileShulkerBox, Tile
-};
-use pocketmine\block\{
-	Block, BlockToolType, Transparent
-};
+use CortexPE\tile\{ShulkerBox as TileShulkerBox, Tile};
+use pocketmine\block\{Block, BlockToolType, Transparent};
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
-use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\tile\Container;
 
@@ -71,20 +66,6 @@ class ShulkerBox extends Transparent {
 		return "Shulker Box";
 	}
 
-	public function place(Item $item, Block $blockReplace, Block $blockClicked, int $face, Vector3 $clickVector, Player $player = null): bool{
-		// TODO: Rotation
-		$this->getLevel()->setBlock($blockReplace, $this, true, true);
-		$nbt = TileShulkerBox::createNBT($this, $face, $item, $player); // why tf isnt it loading the items... reee
-		$items = $item->getNamedTag()->getTag(Container::TAG_ITEMS);
-		if($items !== null){
-			$nbt->setTag($items);
-		}
-		Tile::createTile(Tile::SHULKER_BOX, $this->getLevel(), $nbt);
-
-		($inv = $player->getInventory())->clear($inv->getHeldItemIndex()); // TODO: We need PMMP to be able to set max stack size in blocks... ree
-		return true;
-	}
-
 	public function onBreak(Item $item, Player $player = null): bool{
 		/** @var TileShulkerBox $t */
 		$t = $this->getLevel()->getTile($this);
@@ -93,9 +74,13 @@ class ShulkerBox extends Transparent {
 			$itemNBT = clone $item->getNamedTag();
 			$itemNBT->setTag($t->getCleanedNBT()->getTag(Container::TAG_ITEMS));
 			$item->setNamedTag($itemNBT);
-			$this->getLevel()->dropItem($this->add(0.5,0.5,0.5), $item);
-
-			$t->getInventory()->clearAll(); // dont drop the items
+			if($player->getGamemode() === Player::CREATIVE){
+				$t->getInventory()->dropContents($this->getLevel(), $this);
+			}else{
+				$this->getLevel()->dropItem($this->add(0.5, 0.5, 0.5), $item);
+				$t->getInventory()->clearAll(); // dont drop the items
+			}
+			$t->close();
 		}
 		$this->getLevel()->setBlock($this, Block::get(Block::AIR), true, true);
 
@@ -109,7 +94,10 @@ class ShulkerBox extends Transparent {
 				if(!($t instanceof TileShulkerBox)){
 					$t = Tile::createTile(Tile::SHULKER_BOX, $this->getLevel(), TileShulkerBox::createNBT($this));
 				}
-				if(!$this->getSide(Vector3::SIDE_UP)->isTransparent() || !$t->canOpenWith($item->getCustomName()) || ($player->isCreative() && Main::$limitedCreative)){
+				if(!$t instanceof \CortexPE\tile\ShulkerBox){
+					return false;
+				}
+				if(!$this->getSide($t->getFacing())->isTransparent() || !$t->canOpenWith($item->getCustomName()) || ($player->isCreative() && Main::$limitedCreative)){
 					return true;
 				}
 				$player->addWindow($t->getInventory());

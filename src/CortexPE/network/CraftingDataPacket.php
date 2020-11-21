@@ -113,7 +113,23 @@ class CraftingDataPacket extends PMCraftingDataPacket {
 			$writer->reset();
 		}
 
-		$this->putBool($this->cleanRecipes);
+		$this->putUnsignedVarInt(count($this->potionTypeRecipes));
+		foreach($this->potionTypeRecipes as $recipe){
+			$this->putVarInt($recipe->getInputItemId());
+			$this->putVarInt($recipe->getInputItemMeta());
+			$this->putVarInt($recipe->getIngredientItemId());
+			$this->putVarInt($recipe->getIngredientItemMeta());
+			$this->putVarInt($recipe->getOutputItemId());
+			$this->putVarInt($recipe->getOutputItemMeta());
+		}
+		$this->putUnsignedVarInt(count($this->potionContainerRecipes));
+		foreach($this->potionContainerRecipes as $recipe){
+			$this->putVarInt($recipe->getInputItemId());
+			$this->putVarInt($recipe->getIngredientItemId());
+			$this->putVarInt($recipe->getOutputItemId());
+		}
+
+		($this->buffer .= ($this->cleanRecipes ? "\x01" : "\x00"));
 	}
 
 	private static function writeEntry($entry, NetworkBinaryStream $stream){
