@@ -4,5 +4,6 @@ version: 1.3.0
 api: 3.14.0
 load: STARTUP
 author: CortexPE
-description: A PLUGIN to Extend PMMP's Functionality without completely changing it.
-website: https://CortexPE.xyz
+authors: [xtakumatutix]
+description: プラグインでPMMPにバニラの要素をちょっと追加します
+website: https://github.com/xtakumatutix/TeaSpoonJP
